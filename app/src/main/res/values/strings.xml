@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Inspiring Quote</string>
+    <string name="quote">Quote</string>
+    <string name="author_name">Author Name</string>
 </resources>
