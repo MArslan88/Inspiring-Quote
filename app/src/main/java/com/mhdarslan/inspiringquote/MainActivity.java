@@ -1,6 +1,7 @@
 package com.mhdarslan.inspiringquote;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -14,7 +15,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +57,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mDocRef.addSnapshotListener(this,new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                if(documentSnapshot.exists()){
+                    String quoteText = documentSnapshot.getString(QUOTE_KEY);
+                    String authText = documentSnapshot.getString(AUTHOR_KEY);
+
+                    quoteTextView.setText("\"" + quoteText + "\"--" + authText);
+                }else if(error != null){
+                    Log.w(TAG,"Got an exception!", error);
+                }
+            }
+        });
     }
 
     public void saveQuote (){
