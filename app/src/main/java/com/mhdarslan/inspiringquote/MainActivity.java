@@ -87,5 +87,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fetchQuote(){
+        mDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    String quoteText = documentSnapshot.getString(QUOTE_KEY);
+                    String authText = documentSnapshot.getString(AUTHOR_KEY);
+
+                    quoteTextView.setText("\"" + quoteText + "\"--" + authText);
+                }
+            }
+        });
     }
 }
